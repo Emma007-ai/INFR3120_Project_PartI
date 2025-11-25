@@ -9,7 +9,10 @@ function ensureAuth(req, res, next) {
   if (req.isAuthenticated && req.isAuthenticated()) {
     return next();
   }
-  return res.redirect('/login');
+
+  // Not logged in -> remember where they were trying to go
+  const nextUrl = encodeURIComponent(req.originalUrl || '/');
+  return res.redirect('/login?next=' + nextUrl);
 }
 
 // ---------- HOME + SEARCH + VIEW MODE ----------
@@ -226,4 +229,5 @@ router.post('/contact', (req, res) => {
 });
 
 module.exports = router;
+
 
