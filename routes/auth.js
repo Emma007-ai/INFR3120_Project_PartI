@@ -42,22 +42,36 @@ router.post('/register', async (req, res) => {
 // ---------- LOGIN PAGE ----------
 router.get('/login', (req, res) => {
   const showError = req.query.error === '1';
+  const nextUrl   = req.query.next || '';
 
   res.render('login', {
     title: 'Login',
     searchQuery: '',
-    error: showError
+    error: showError,
+    next: nextUrl
   });
 });
 
-// ---------- HANDLE LOGIN ----------
-router.post(
-  '/login',
-  passport.authenticate('local', {
-    successRedirect: '/',    // go to Create page after login
-    failureRedirect: '/login?error=1'
-  })
-);
+// ---------- HANDLE LOGIN (DYNAMIC REDIRECT) ----------
+router.post('/login', (req, res, next) => {
+  const nextUrl = req.body.next || '/';   // default: home page
+
+  passport.authenticate('local', (err, user, info) => {
+    if (err) return next(err);
+    if (!user) {
+      // Login failed -> back to login, keep error + next
+      const redirectUrl =
+        '/login?error=1' + (nextUrl ? '&next=' + encodeURIComponent(nextUrl) : '');
+      return res.redirect(redirectUrl);
+    }
+
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      // Login OK -> go to original page (e.g. /create) or home
+      return res.redirect(nextUrl || '/');
+    });
+  })(req, res, next);
+});
 
 // ---------- LOGOUT ----------
 router.get('/logout', (req, res, next) => {
@@ -68,3 +82,4 @@ router.get('/logout', (req, res, next) => {
 });
 
 module.exports = router;
+
