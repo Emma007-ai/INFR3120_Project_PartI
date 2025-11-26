@@ -1,70 +1,120 @@
-README
+RecipeCraft – Secure CRUD Application (INFR3120 Assignment 2)
 
-Project Title: RecipeCraft
 
 Description:
-RecipeCraft is a simple recipe management web application that allows users to add, edit, delete, view, and search for recipes. Each recipe includes fields such as name, ingredients, steps, duration, equipment, notes, and an image. The project uses Node.js, Express, EJS templates, and MongoDB Atlas as the cloud database.
+RecipeCraft is a secure recipe management web application that allows users to create, view, update, and delete their own recipes.
+In this version (Project Part 2), full user authentication, sessions, and protected routes were added.
+Each user has a personal account, and recipes are stored per-user, so no other user can see or modify them.
 
-Features:
+The application uses Node.js, Express, Passport.js, MongoDB Atlas, EJS, and is deployed on Render.
 
-Add new recipes
+Features (Updated for Part 2 Authentication)
+User Authentication
 
-Edit existing recipes
+Register page
 
-Delete recipes
+Login page
 
-View recipes in a read-only page
+Logout functionality
 
-Search recipes by name, ingredients, and notes
+Password hashing with bcrypt
 
-Upload images from the user’s computer
+Session-based authentication using Passport.js
 
-About and Contact pages
+Navigation Bar Rules
 
-Cloud database storage using MongoDB Atlas
+Shows Login and Register when logged out
 
-Technologies Used:
+Shows Logout when logged in
+
+Add Recipe is protected and redirects to login if needed
+
+Protected CRUD
+
+Create Recipe requires login
+
+Edit Recipe requires login and must belong to the logged-in user
+
+Delete Recipe requires login and must belong to the logged-in user
+
+View Recipe requires login and must belong to the logged-in user
+
+Per-User Recipes
+
+Each user only sees their own recipes on the homepage
+
+Logging into another account shows a different set of recipes
+
+Public Pages
+
+About page (public)
+
+Contact page (public)
+
+Technologies Used
 Node.js
 Express.js
+Passport.js (Local Strategy)
 MongoDB Atlas
 Mongoose
 EJS
-HTML and CSS
+HTML/CSS
 Bootstrap
-Git and GitHub
-Render (deployment)
+Render (Cloud Deployment)
 
-File Structure:
-app.js – main server file
-routes/index.js – routing logic
-models/Recipe.js – database schema
-views/ – EJS templates
-views/partials/ – header and footer
-public/stylesheets/style.css – styling
-public/javascripts/main.js – client scripts
-public/images – images
-.env – contains MongoDB connection string
-.gitignore – hides sensitive files
 
-Environment Variables:
-The project uses a .env file that stores the MongoDB Atlas connection string.
-This file must not be uploaded to GitHub.
 
-How to Run:
+
+File Structure
+app.js               – Main server file
+config/passport.js   – Passport authentication configuration
+routes/auth.js       – Login, Register, Logout routes
+routes/index.js      – Recipe CRUD and protected routes
+models/User.js       – User schema
+data/recipes.js      – Recipe schema with user ownership
+views/               – All EJS pages
+views/partials/      – Header and Footer templates
+public/              – CSS, JS, images
+.env                 – MongoDB URI and session secret
+.gitignore           – Ignores node_modules and .env
+
+
+Environment Variables
+Create a .env file in the project root with:
+
+MONGO_URI=your-mongodb-connection-string
+SESSION_SECRET=anysecretstring
+
+
+The .env file should not be pushed to GitHub.
+
+How to Run Locally
 
 Install Node.js
 
-Run "npm install" to install dependencies
+Run:
+npm install
 
-Create a .env file in the project root and add the MongoDB connection string
 
-Start the server with "npm start"
+Create a .env file with your MongoDB connection string
 
-Open the browser at "http://localhost:3000
-"
+Start the server:
+npm start
 
-Deployment:
-The project is deployed using Render. The environment variable MONGO_URI must be added to Render for the database to connect. The build command is "npm install" and the start command is "npm start".
+
+Open the browser:
+http://localhost:3000
+
+Deployment (Render)
+Your Render service must include these environment variables:
+MONGO_URI=your Atlas URI
+SESSION_SECRET=your secret
+
+
+Start Command:
+npm start
+After deployment, users can register and log in on the live site.
 
 Purpose:
-This project was built for academic purposes as part of the INFR3120 course to demonstrate full-stack development with a cloud-based database.
+This project was created for the INFR3120 Web & Script Programming course (Assignment Part 2).
+The focus of this release is authentication, session management, protected CRUD operations, and cloud deployment.
